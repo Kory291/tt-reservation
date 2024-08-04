@@ -1,10 +1,11 @@
 import os
+import random
 import re
+import time
 from datetime import datetime, timedelta
 from typing import Any
 
-from playwright.sync_api import (Locator, Page, Playwright, expect,
-                                 sync_playwright)
+from playwright.sync_api import Locator, Page, Playwright, expect, sync_playwright
 
 from tt_reservations.exceptions import TimeSlotNotAvailableError
 
@@ -30,11 +31,9 @@ def run(playwright: Playwright) -> None:
         datetime(STANDARD_YEAR, STANDARD_MONTH, STANDARD_DAY, 18, 0), timedelta(hours=2)
     )
     # TODO: check if chosen timeslot are present for booking
-    reserve_time(desired_timeslots[0], page)
     for desired_timeslot in desired_timeslots:
         try:
             reserve_time(desired_timeslot, page)
-
         except TimeSlotNotAvailableError as e:
             print(e)
     browser.close()
@@ -95,11 +94,20 @@ def fill_form(
         email = os.environ.get("EMAIL")
 
     fields = form.locator("label")
-    # first_name_field = [field for field in fields if field.get_attribute("name") == "vorname"]
-    # last_name_field =
-    # telephone_number_field =
-    # email_field =
-    print("..")
+    first_name_field = form.locator('input[name="prename1"]')
+    last_name_field = form.locator('input[name="familyname1"]')
+    telephone_number_field = form.locator('input[name="phone"]')
+    email_field = form.locator('input[name="email"]')
+    publish_data_checkbox = form.locator('input[name="publishDataCheckbox"]')
+    accept_button = form.get_by_role("button").filter(has_text="Buchung vornehmen")
+
+    first_name_field.fill(first_name)
+    last_name_field.fill(last_name)
+    telephone_number_field.fill(telephone_number)
+    email_field.fill(email)
+    publish_data_checkbox.check()
+    accept_button.click()
+    time.sleep(random.randint(1, 11) / 10)
 
 
 def select_times(
