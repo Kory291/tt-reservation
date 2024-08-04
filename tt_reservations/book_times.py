@@ -21,8 +21,8 @@ def get_eligable_timeslots(page: Any):
 def run(
     playwright: Playwright,
     start_time: datetime,
-    time_delta: timedelta = None,
     end_time: datetime = None,
+    time_delta: timedelta = None,
 ) -> None:
     firefox = playwright.firefox
     browser = firefox.launch(headless=False)
@@ -33,7 +33,7 @@ def run(
     deny_button.click()
 
     desired_timeslots = select_times(
-        datetime(STANDARD_YEAR, STANDARD_MONTH, STANDARD_DAY, 18, 0), timedelta(hours=2)
+        start_time=start_time, time_delta=time_delta, end_time=end_time
     )
     # TODO: check if chosen timeslot are present for booking
     for desired_timeslot in desired_timeslots:
@@ -119,6 +119,7 @@ def select_times(
     start_time: datetime, time_delta: timedelta = None, end_time: datetime = None
 ) -> list[datetime]:
     # some preleminary checks
+    print(start_time, end_time, time_delta)
     if not isinstance(start_time, datetime):
         raise TypeError("start_time must be a datetime object")
     if time_delta and not isinstance(time_delta, timedelta):
@@ -157,7 +158,7 @@ def select_times(
 
 
 def book_times(
-    start_time: datetime, time_delta: timedelta = None, end_time: datetime = None
+    start_time: datetime, end_time: datetime = None, time_delta: timedelta = None
 ):
     with sync_playwright() as playwright:
         run(playwright, start_time, time_delta, end_time)
