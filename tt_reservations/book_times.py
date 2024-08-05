@@ -5,7 +5,8 @@ import time
 from datetime import datetime, timedelta
 from typing import Any
 
-from playwright.sync_api import Locator, Page, Playwright, expect, sync_playwright
+from playwright.sync_api import (Locator, Page, Playwright, expect,
+                                 sync_playwright)
 
 from tt_reservations.exceptions import TimeSlotNotAvailableError
 
@@ -161,4 +162,4 @@ def book_times(
     start_time: datetime, end_time: datetime = None, time_delta: timedelta = None
 ):
     with sync_playwright() as playwright:
-        run(playwright, start_time, time_delta, end_time)
+        run(playwright, start_time, end_time, time_delta)
