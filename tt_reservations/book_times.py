@@ -28,7 +28,7 @@ def run(
     firefox = playwright.firefox
     browser = firefox.launch(headless=False)
     page = browser.new_page()
-    page.goto(os.environ.get("TT_PAGE"))
+    page.goto(f"{os.getenv('TT_PAGE')}{start_time.strftime('%d.%m.%Y')}")
     anchors = page.locator("a")
     deny_button = anchors.filter(has_text="Accept all")
     deny_button.click()
