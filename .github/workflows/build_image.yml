@@ -1,0 +1,23 @@
+name: Build TT_Reservations image
+
+on push:
+  branches:
+    - main
+  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    contaier: docker:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build iamge
+        run: docker build -f tt_reservations/Dockerfile -t tt_reservations:latest .
+
+      - name: Push image
+        run: |
+          docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.REGISTRY_TOKEN }}
+          docker tag tt_reservations:latest ghcr.io/${{ github.repository_owner }}/tt_reservations:latest
+          docker push ghcr.io/${{ github.repository_owner }}/tt_reservations:latest
