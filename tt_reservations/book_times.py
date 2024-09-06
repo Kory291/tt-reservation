@@ -29,7 +29,6 @@ def run(
     browser = firefox.launch()
     page = browser.new_page()
     page.goto(f"{os.getenv('TT_PAGE')}{start_time.strftime('%d.%m.%Y')}")
-    return
     anchors = page.locator("a")
     deny_button = anchors.filter(has_text="Accept all")
     deny_button.click()
