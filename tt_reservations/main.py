@@ -9,7 +9,7 @@ from tt_reservations.book_times import book_times
 
 DATETIME_PATTERN = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$"
 origins = [
-    "http://80.187.127.138",
+    "*"
 ]
 
 app = FastAPI()
