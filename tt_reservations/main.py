@@ -3,12 +3,23 @@ from datetime import datetime, timedelta
 from typing import Annotated
 
 from fastapi import FastAPI, HTTPException, Query, status
+from fastapi.middleware.cors import CORSMiddleware
 
 from tt_reservations.book_times import book_times
 
 DATETIME_PATTERN = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$"
+origins = [
+    "http://80.187.127.138",
+]
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 @app.post("/reserve_time", status_code=status.HTTP_201_CREATED)
