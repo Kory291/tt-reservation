@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException, Query, status
 
 from tt_reservations.book_times import book_times
 
-DATETIME_PATTERN = r"^\d{2}-\d{2}-\d{4}T\d{2}:\d{2}$"
+DATETIME_PATTERN = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$"
 
 app = FastAPI()
 
@@ -28,9 +28,9 @@ def reserve_time(
         ),
     ] = None,
 ) -> dict:
-    start_time = datetime.strptime(start_time, "%d-%m-%YT%H:%M")
+    start_time = datetime.strptime(start_time, "%Y-%m-%dT%H:%M")
     if end_time:
-        end_time = datetime.strptime(end_time, "%d-%m-%YT%H:%M")
+        end_time = datetime.strptime(end_time, "%Y-%m-%dT%H:%M")
     if time_delta:
         if re.match(r"^\d+M$", time_delta):
             time_delta = timedelta(minutes=int(time_delta[:-1]))
