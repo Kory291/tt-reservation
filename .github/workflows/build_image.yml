@@ -14,14 +14,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build image
-        run: docker build -f tt_reservations/Dockerfile -t tt_reservations:latest .
+      - name: Build images
+        run: |
+          docker build -f tt_reservations/Dockerfile -t tt_reservations:latest .
+          docker build -f tt-reservations-frontend/Dockerfile -t tt_reservations_frontend:latest 
 
       - name: Push image
         run: |
           docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
           docker tag tt_reservations:latest ghcr.io/kory291/tt_reservations:latest
           docker push ghcr.io/kory291/tt_reservations:latest
+          docker tag tt_reservations_frontend:latest ghcr.io/kory291/tt_reservations_frontend:latest
     permissions:
       contents: read
       packages: write
