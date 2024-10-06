@@ -1,7 +1,7 @@
 FROM node:20.17.0-alpine
 
+COPY tt-reservations-frontend /usr/src/app
 WORKDIR /usr/src/app
-COPY . /usr/src/app
 
 RUN npm install -g @angular/cli
 RUN npm install
