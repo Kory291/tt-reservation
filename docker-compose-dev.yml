@@ -1,0 +1,20 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: tt_reservations/Dockerfile
+    networks:
+      - net
+    volumes:
+      - .env:.env
+
+
+  frontend:
+    build: 
+      context: .
+      dockerfile: tt-reservations-frontend/Dockerfile
+    networks:
+      - net
+
+networks:
+  net:
