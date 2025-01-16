@@ -1,5 +1,0 @@
-services:
-  backend:
-   image: 
-    name: ghcr.io/kory291/tt_reservations:latest
-    
