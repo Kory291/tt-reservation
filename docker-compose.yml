@@ -1,20 +1,20 @@
 services:
   backend:
-    build:
-      context: .
-      dockerfile: tt_reservations/Dockerfile
+    image: ghcr.io/kory291/tt_reservations:latest
     networks:
       - net
     volumes:
       - .env:.env
+      - ${SSL_CERTS}:/certs
+    restart: unless-stopped
 
 
   frontend:
-    build: 
-      context: .
-      dockerfile: tt-reservations-frontend/Dockerfile
+  
+    image: "ghcr.io/kory291/tt_reservations_frontend:latest" 
     networks:
       - net
+    restart: unless-stopped
 
 networks:
   net:

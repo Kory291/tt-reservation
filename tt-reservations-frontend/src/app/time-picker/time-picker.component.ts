@@ -37,7 +37,7 @@ export class TimePickerComponent implements OnInit {
     const headers: Headers = new Headers();
     headers.set("Access-Control-Allow-Origin", "*")
     headers.set("Accept", "application/json")
-    const request: RequestInfo = new Request("http://localhost:9000/reserve_time?start_time="+start_day+"T"+encodeURIComponent(start_time)+"&end_time="+start_day+"T"+encodeURIComponent(end_time), {method: 'POST', headers: headers});
+    const request: RequestInfo = new Request("http://backend:9000/reserve_time?start_time="+start_day+"T"+encodeURIComponent(start_time)+"&end_time="+start_day+"T"+encodeURIComponent(end_time), {method: 'POST', headers: headers});
     return await fetch(request);
   }
 
