@@ -9,4 +9,4 @@ ENV SSL_KEY = ""
 RUN npm install -g @angular/cli
 RUN npm install
 
-ENTRYPOINT ["bash", "/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
