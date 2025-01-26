@@ -3,8 +3,9 @@ services:
     image: ghcr.io/kory291/tt_reservations:latest
     networks:
       - net
-    volumes:
-      - ${TT_RESERVATION_VAR_FILE:?Provide value for TT_RESERVATION_VAR_FILE}:.env
+    env_file: 
+      - path: ./.env
+        required: true
     restart: unless-stopped
 
 
