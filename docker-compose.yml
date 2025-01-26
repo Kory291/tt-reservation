@@ -4,7 +4,7 @@ services:
     networks:
       - net
     volumes:
-      - .env:.env
+      - ${TT_RESERVATION_VAR_FILE:?Provide value for TT_RESERVATION_VAR_FILE}:.env
     restart: unless-stopped
 
 
