@@ -1,6 +1,7 @@
 FROM node:20.17.0-alpine
 
 COPY tt-reservations-frontend /usr/src/app
+COPY entrypoint.sh /entrypoint.sh
 WORKDIR /usr/src/app
 
 ENV SSL_CERT = ""
