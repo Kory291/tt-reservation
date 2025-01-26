@@ -4,7 +4,7 @@ services:
     networks:
       - net
     env_file: 
-      - path: ./.env
+      - path: ./.backend.env
         required: true
     restart: unless-stopped
 
@@ -15,7 +15,11 @@ services:
       - net
     restart: unless-stopped
     ports:
-      - "${FRONTEND_PORT}:4200"
+      - "${FRONTEND_PORT:-4200}:4200"
+    env_file:
+      - path: ./.frontend.env
+        required: false
+
 
 networks:
   net:
