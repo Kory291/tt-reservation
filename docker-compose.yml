@@ -9,13 +9,10 @@ services:
 
 
   frontend:
-  
     image: "ghcr.io/kory291/tt_reservations_frontend:latest" 
     networks:
       - net
     restart: unless-stopped
-    volumes:
-      - ${SSL_CERTS}:/certs
 
 networks:
   net:
