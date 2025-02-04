@@ -1,8 +1,8 @@
 services:
   backend:
     image: ghcr.io/kory291/tt_reservations:latest
-    networks:
-      - net
+    ports:
+      - "${BACKEND_PORT:-3000}:8000"
     env_file: 
       - path: ./.backend.env
         required: true
@@ -19,7 +19,3 @@ services:
     env_file:
       - path: ./.frontend.env
         required: false
-
-
-networks:
-  net:
