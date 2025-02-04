@@ -11,8 +11,6 @@ services:
 
   frontend:
     image: "ghcr.io/kory291/tt_reservations_frontend:latest" 
-    networks:
-      - net
     restart: unless-stopped
     ports:
       - "${FRONTEND_PORT:-4200}:4200"
