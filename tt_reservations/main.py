@@ -2,13 +2,15 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
-
 from fastapi import Depends, FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 
-from tt_reservations.auth.models import User, Token
-from tt_reservations.auth.methods import authenticate_user, create_access_token, get_current_active_user, fake_users_db, oauth2_scheme
+from tt_reservations.auth.methods import (authenticate_user,
+                                          create_access_token,
+                                          get_current_active_user,
+                                          load_users_from_file, oauth2_scheme)
+from tt_reservations.auth.models import Token, User
 from tt_reservations.book_times import book_times
 
 DATETIME_PATTERN = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$"
@@ -22,6 +24,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.post("/reserve_time", status_code=status.HTTP_201_CREATED)
 def reserve_time(
@@ -77,12 +80,15 @@ async def read_users_me(
 
 @app.post("/token")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    user = authenticate_user(
+        load_users_from_file(), form_data.username, form_data.password
+    )
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, 
-            detail="Incorrect username or password", 
-            headers={"WWW-Authenticate": "Bearer"})
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     access_token = create_access_token(data={"sub": user.username})
     return Token(access_token=access_token, token_type="bearer")
 

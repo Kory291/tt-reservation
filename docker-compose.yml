@@ -6,6 +6,10 @@ services:
     env_file: 
       - path: ./.backend.env
         required: true
+    volumes:
+      - type: bind
+        source: ./users.json
+        target: /tt_reservations/users.json
     restart: unless-stopped
 
 
