@@ -43,7 +43,7 @@ export class TimePickerComponent implements OnInit {
 
   onSubmit() {
     if (this.chosen_time.valid) {
-      console.warn(this.chosen_time.value);
+      console.info(this.chosen_time.value);
       var start_day = this.chosen_time.value.day;
       var start_time = this.chosen_time.value.start_time;
       var end_time = this.chosen_time.value.end_time;
