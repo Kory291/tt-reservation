@@ -27,7 +27,12 @@ export class LoginMaskComponent implements OnInit {
     const api_endpoint = 'http://localhost:8000/token'
     // const api_endpoint = 'https://lukas-schaefer.me/api/token';
     const http_params = new HttpParams().set('username', this.login_form.value.username).set('password', this.login_form.value.password);
-    this.http.post(api_endpoint, http_params.toString(), {headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'), observe: 'response'}).subscribe(response => {
+    const headers: HttpHeaders = new HttpHeaders()
+      .set("Access-Control-Allow-Origin", "*")
+      .set("Content-Type", "application/x-www-form-urlencoded")
+      .set("Accept", "application/json");
+    console.log(http_params.toString());
+    this.http.post(api_endpoint, http_params.toString(), {headers: headers, observe: 'response'}).subscribe(response => {
       if (response.status !== 200) {
         console.error('Login failed');
         return;
@@ -39,7 +44,7 @@ export class LoginMaskComponent implements OnInit {
         console.error('Response body is null');
         return;
       }
-      console.log(response.body['token_type']);
+      // console.log(response.body['token_type']);
     });
   }
 }

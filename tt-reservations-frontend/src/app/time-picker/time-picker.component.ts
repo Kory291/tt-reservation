@@ -35,7 +35,7 @@ export class TimePickerComponent implements OnInit {
 
   async book_time(start_day: string, start_time: string, end_time: string) {
     const headers: Headers = new Headers();
-    headers.set("Access-Control-Allow-Origin", "*")
+    headers.set("Access-Control-Allow-Origin", "*");
     headers.set("Accept", "application/json");
     const request: RequestInfo = new Request("https://tt-reservation.lukas-schaefer.me/api/reserve_time?start_time="+start_day+"T"+encodeURIComponent(start_time)+"&end_time="+start_day+"T"+encodeURIComponent(end_time), {method: 'POST', headers: headers});
     return await fetch(request);
