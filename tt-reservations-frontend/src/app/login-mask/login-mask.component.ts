@@ -41,25 +41,25 @@ export class LoginMaskComponent implements OnInit {
       .set('Access-Control-Allow-Origin', '*')
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Accept', 'application/json');
-    console.log(http_params.toString());
     this.http
-      .post(api_endpoint, http_params.toString(), {
-        headers: headers,
-        observe: 'response',
-      })
+      .post<{ access_token: string; token_type: string }>(
+        api_endpoint,
+        http_params.toString(),
+        {
+          headers: headers,
+          observe: 'response',
+        },
+      )
       .subscribe((response) => {
         if (response.status !== 200) {
           console.error('Login failed');
           return;
         }
-        // let accessToken = response.body['access_token'];
-        // console.log('Access token:', accessToken);
-        // console.log(response.body.access_token);
-        if (response.body === null) {
-          console.error('Response body is null');
+        if (!response.body || !response.body.access_token) {
+          console.error('Access token is missing in the response');
           return;
         }
-        // console.log(response.body['token_type']);
+        const access_token: string = response.body.access_token;
       });
   }
 }
