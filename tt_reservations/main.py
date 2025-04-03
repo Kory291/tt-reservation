@@ -1,4 +1,5 @@
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
@@ -98,6 +99,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         access_token=access_token,
         token_type="bearer",
         expires_in=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        not_after=time.time() + ACCESS_TOKEN_EXPIRE_MINUTES * 60,
     )
 
 

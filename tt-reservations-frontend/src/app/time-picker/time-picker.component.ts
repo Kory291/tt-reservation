@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +21,8 @@ export class TimePickerComponent implements OnInit {
     });
   }
 
+  constructor(private http: HttpClient) {}
+
   get_suggested_date() {
     return '2024-06-07';
   }
@@ -33,32 +36,50 @@ export class TimePickerComponent implements OnInit {
   }
 
   async book_time(start_day: string, start_time: string, end_time: string) {
-    const headers: Headers = new Headers();
-    headers.set('Access-Control-Allow-Origin', '*');
-    headers.set('Accept', 'application/json');
-    headers.set('Authorization', 'Bearer ' + );
-    const request: RequestInfo = new Request(
-      'https://tt-reservation.lukas-schaefer.me/api/reserve_time?start_time=' +
-        start_day +
-        'T' +
-        encodeURIComponent(start_time) +
-        '&end_time=' +
-        start_day +
-        'T' +
-        encodeURIComponent(end_time),
-      { method: 'POST', headers: headers },
-    );
-    return await fetch(request);
+    // const headers: Headers = new Headers();
+    const headers: HttpHeaders = new HttpHeaders()
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/x-www-form-urlencoded');
+    const body = new HttpParams()
+      .set('start_time', start_day + 'T' + start_time)
+      .set('end_time', start_day + 'T' + end_time);
+    // const api_endpoint = "https://tt-reservation.lukas-schaefer.me/api/reserve_time";
+    const api_endpoint = 'http://localhost:8000/reserve_time';
+    this.http
+      .post(api_endpoint, body.toString(), { headers: headers })
+      .subscribe({
+        next: (response) => {
+          console.info('Booking successful:', response);
+        },
+        error: () => {
+          console.error('Booking failed');
+        },
+        complete: () => {
+          console.info('Booking request completed');
+        },
+      });
+    // const request: RequestInfo = new Request(
+    //   'https://tt-reservation.lukas-schaefer.me/api/reserve_time?start_time=' +
+    //     start_day +
+    //     'T' +
+    //     encodeURIComponent(start_time) +
+    //     '&end_time=' +
+    //     start_day +
+    //     'T' +
+    //     encodeURIComponent(end_time),
+    //   { method: 'POST', headers: headers },
+    // );
+    // return await fetch(request);
   }
 
   onSubmit() {
     if (this.chosen_time.valid) {
       console.info(this.chosen_time.value);
-      var start_day = this.chosen_time.value.day;
-      var start_time = this.chosen_time.value.start_time;
-      var end_time = this.chosen_time.value.end_time;
-      var result = this.book_time(start_day, start_time, end_time);
-      console.log(result);
+      let start_day = this.chosen_time.value.day;
+      let start_time = this.chosen_time.value.start_time;
+      let end_time = this.chosen_time.value.end_time;
+      this.book_time(start_day, start_time, end_time);
       alert('Submitted booking with' + this.chosen_time.value + ' !');
     } else {
       console.error('Form is invalid');
