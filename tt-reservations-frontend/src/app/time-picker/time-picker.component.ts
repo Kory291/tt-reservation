@@ -36,6 +36,7 @@ export class TimePickerComponent implements OnInit {
     const headers: Headers = new Headers();
     headers.set('Access-Control-Allow-Origin', '*');
     headers.set('Accept', 'application/json');
+    headers.set('Authorization', 'Bearer ' + );
     const request: RequestInfo = new Request(
       'https://tt-reservation.lukas-schaefer.me/api/reserve_time?start_time=' +
         start_day +

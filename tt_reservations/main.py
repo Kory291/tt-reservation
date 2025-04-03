@@ -6,11 +6,15 @@ from fastapi import Depends, FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 
-from tt_reservations.auth.methods import (authenticate_user,
-                                          create_access_token,
-                                          get_current_active_user,
-                                          load_users_from_file, oauth2_scheme)
+from tt_reservations.auth.methods import (
+    authenticate_user,
+    create_access_token,
+    get_current_active_user,
+    load_users_from_file,
+    oauth2_scheme,
+)
 from tt_reservations.auth.models import Token, User
+from tt_reservations.auth.settings import ACCESS_TOKEN_EXPIRE_MINUTES
 from tt_reservations.book_times import book_times
 
 DATETIME_PATTERN = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$"
@@ -90,7 +94,11 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = create_access_token(data={"sub": user.username})
-    return Token(access_token=access_token, token_type="bearer")
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        expires_in=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+    )
 
 
 def main() -> None:

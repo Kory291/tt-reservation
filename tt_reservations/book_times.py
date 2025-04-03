@@ -5,8 +5,7 @@ import time
 from datetime import datetime, timedelta
 from typing import Any
 
-from playwright.sync_api import (Locator, Page, Playwright, expect,
-                                 sync_playwright)
+from playwright.sync_api import Locator, Page, Playwright, expect, sync_playwright
 
 from tt_reservations.exceptions import TimeSlotNotAvailableError
 
