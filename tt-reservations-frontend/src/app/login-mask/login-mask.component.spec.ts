@@ -8,9 +8,8 @@ describe('LoginMaskComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginMaskComponent]
-    })
-    .compileComponents();
+      imports: [LoginMaskComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LoginMaskComponent);
     component = fixture.componentInstance;
