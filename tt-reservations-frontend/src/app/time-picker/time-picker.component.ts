@@ -36,41 +36,31 @@ export class TimePickerComponent implements OnInit {
   }
 
   async book_time(start_day: string, start_time: string, end_time: string) {
-    // const headers: Headers = new Headers();
     const headers: HttpHeaders = new HttpHeaders()
       .set('Access-Control-Allow-Origin', '*')
       .set('Accept', 'application/json')
       .set('Content-Type', 'application/x-www-form-urlencoded');
-    const body = new HttpParams()
-      .set('start_time', start_day + 'T' + start_time)
-      .set('end_time', start_day + 'T' + end_time);
-    // const api_endpoint = "https://tt-reservation.lukas-schaefer.me/api/reserve_time";
-    const api_endpoint = 'http://localhost:8000/reserve_time';
-    this.http
-      .post(api_endpoint, body.toString(), { headers: headers })
-      .subscribe({
-        next: (response) => {
-          console.info('Booking successful:', response);
-        },
-        error: () => {
-          console.error('Booking failed');
-        },
-        complete: () => {
-          console.info('Booking request completed');
-        },
-      });
-    // const request: RequestInfo = new Request(
-    //   'https://tt-reservation.lukas-schaefer.me/api/reserve_time?start_time=' +
-    //     start_day +
-    //     'T' +
-    //     encodeURIComponent(start_time) +
-    //     '&end_time=' +
-    //     start_day +
-    //     'T' +
-    //     encodeURIComponent(end_time),
-    //   { method: 'POST', headers: headers },
-    // );
-    // return await fetch(request);
+    const api_endpoint =
+      'https://tt-reservation.lukas-schaefer.me/api/reserve_time?start_time=' +
+      start_day +
+      'T' +
+      encodeURIComponent(start_time) +
+      '&end_time=' +
+      start_day +
+      'T' +
+      encodeURIComponent(end_time);
+    // const api_endpoint = 'http://localhost:8000/reserve_time?start_time=' + start_day + 'T' + encodeURIComponent(start_time) + '&end_time=' + start_day + 'T' + encodeURIComponent(end_time);
+    this.http.post(api_endpoint, { headers: headers }).subscribe({
+      next: (response) => {
+        console.info('Booking successful:', response);
+      },
+      error: () => {
+        console.error('Booking failed');
+      },
+      complete: () => {
+        console.info('Booking request completed');
+      },
+    });
   }
 
   onSubmit() {
