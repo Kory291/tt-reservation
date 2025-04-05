@@ -24,7 +24,7 @@ export class AccessTokenHandlerService {
 
   retrieveAccessToken(username: string, password: string): void {
     // const api_endpoint = 'http://localhost:8000/token';
-    const api_endpoint = 'https://lukas-schaefer.me/api/token';
+    const api_endpoint = 'https://tt-reservation.lukas-schaefer.me/api/token';
     const http_params = new HttpParams()
       .set('username', username)
       .set('password', password);
