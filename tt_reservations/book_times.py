@@ -5,10 +5,15 @@ import time
 from datetime import datetime, timedelta
 from typing import Any
 
-from playwright.sync_api import (Locator, Page, Playwright, expect,
-                                 sync_playwright)
+from playwright.sync_api import Locator, Page, Playwright, expect, sync_playwright
 
-from tt_reservations.exceptions import TimeSlotNotAvailableError
+# from tt_reservations.exceptions import TimeSlotNotAvailableError
+
+class TimeSlotNotAvailableError(Exception):
+    """Exception raised when a time slot is not available."""
+
+    def __init__(self, message: str):
+        super().__init__(message)
 
 STANDARD_YEAR = 1900
 STANDARD_MONTH = 1
@@ -26,7 +31,7 @@ def run(
     time_delta: timedelta = None,
 ) -> None:
     firefox = playwright.firefox
-    browser = firefox.launch()
+    browser = firefox.launch(headless=False)
     page = browser.new_page()
     page.goto(f"{os.getenv('TT_PAGE')}{start_time.strftime('%d.%m.%Y')}")
     anchors = page.locator("a")
@@ -163,3 +168,8 @@ def book_times(
 ):
     with sync_playwright() as playwright:
         run(playwright, start_time, end_time, time_delta)
+
+if __name__ == "__main__":
+    start_time = datetime.strptime("2024-06-07T19:00", "%Y-%m-%dT%H:%M")
+    end_time = datetime.strptime("2024-06-07T20:00", "%Y-%m-%dT%H:%M")
+    book_times(start_time, end_time)

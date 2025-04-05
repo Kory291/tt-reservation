@@ -8,7 +8,7 @@ import { LoginMaskComponent } from './login-mask/login-mask.component';
   standalone: true,
   imports: [RouterOutlet, TimePickerComponent, LoginMaskComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'tt-reservations-frontend';

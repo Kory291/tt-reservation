@@ -9,7 +9,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
-playwright = "^1.46.0"
+playwright = "^1.51.0"
 fastapi = {extras = ["standard"], version = "^0.112.0"}
 pyjwt = "^2.9.0"
 bcrypt = "^4.2.0"

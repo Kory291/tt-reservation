@@ -1,14 +1,14 @@
 <form [formGroup]="chosen_time" (ngSubmit)="onSubmit()">
-    <label for="day">Tag: </label>
-    <input type="date" id="day" formControlName="day">
-    <br/>
-    <label for="start_time">Startzeit: </label>
-    <input type="time" id="start_time" formControlName="start_time">
-    <br/>
-    <label for="end_time">Endzeit: </label>
-    <input type="time" id="end_time" formControlName="end_time">
-    <br/>
-    <button type="submit">Submit</button>
+  <label for="day">Tag: </label>
+  <input type="date" id="day" formControlName="day" />
+  <br />
+  <label for="start_time">Startzeit: </label>
+  <input type="time" id="start_time" formControlName="start_time" />
+  <br />
+  <label for="end_time">Endzeit: </label>
+  <input type="time" id="end_time" formControlName="end_time" />
+  <br />
+  <button type="submit">Submit</button>
 </form>
 
 <p>Tag: {{ chosen_time.value.day }}</p>
