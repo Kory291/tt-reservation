@@ -2,12 +2,13 @@ import os
 import random
 import re
 import time
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Generator
 
 from playwright.sync_api import Locator, Page, Playwright, expect, sync_playwright
 
 # from tt_reservations.exceptions import TimeSlotNotAvailableError
+
 
 class TimeSlotNotAvailableError(Exception):
     """Exception raised when a time slot is not available."""
@@ -15,9 +16,11 @@ class TimeSlotNotAvailableError(Exception):
     def __init__(self, message: str):
         super().__init__(message)
 
+
 STANDARD_YEAR = 1900
 STANDARD_MONTH = 1
 STANDARD_DAY = 1
+
 
 def get_page(playwright: Playwright) -> Generator[Page, None]:
     firefox = playwright.firefox
@@ -26,11 +29,13 @@ def get_page(playwright: Playwright) -> Generator[Page, None]:
     yield page
     browser.close()
 
+
 def setup_site(page: Page) -> Page:
     anchors = page.locator("a")
     deny_button = anchors.filter(has_text="Accept all")
     deny_button.click()
     return page
+
 
 def run(
     playwright: Playwright,
@@ -165,7 +170,8 @@ def select_times(
         for i in range((end_time - start_time).seconds // (60 * 30))
     ]
 
-def get_timeslots(playwright: Playwright) -> list[datetime]:
+
+def get_timeslots(playwright: Playwright) -> list[date]:
     page = next(get_page(playwright))
     page.goto(f"{os.getenv('TT_PAGE')}{datetime.now().strftime('%d.%m.%Y')}")
     page = setup_site(page)
@@ -174,19 +180,21 @@ def get_timeslots(playwright: Playwright) -> list[datetime]:
     ui_date_picker = page.locator("div[id='ui-datepicker-div']")
     all_dates = ui_date_picker.locator("td[class=' undefined']")
     result_list = []
-    for date in all_dates.all():
-        data_month = date.get_attribute("data-month")
-        data_year = date.get_attribute("data-year")
-        data_day = date.locator("a").inner_html()
+    for date_locator in all_dates.all():
+        data_month = date_locator.get_attribute("data-month")
+        data_year = date_locator.get_attribute("data-year")
+        data_day = date_locator.locator("a").inner_html()
         if data_month and data_year and data_day:
-            date = datetime(
-                year=int(data_year),
-                month=int(data_month),
-                day=int(data_day),
+            result_list.append(
+                date(
+                    year=int(data_year),
+                    month=int(data_month),
+                    day=int(data_day),
+                )
             )
-            result_list.append(date)
     next(get_page(playwright))
     return result_list
+
 
 def book_times(
     start_time: datetime, end_time: datetime = None, time_delta: timedelta = None
@@ -194,10 +202,12 @@ def book_times(
     with sync_playwright() as playwright:
         run(playwright, start_time, end_time, time_delta)
 
-def get_eligable_times() -> list[datetime]:
+
+def get_eligable_times() -> list[date]:
     with sync_playwright() as playwright:
         timeslots = get_timeslots(playwright)
     return timeslots
+
 
 if __name__ == "__main__":
     get_eligable_times()

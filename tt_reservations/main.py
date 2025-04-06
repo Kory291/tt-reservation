@@ -102,10 +102,14 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         not_after=time.time() + ACCESS_TOKEN_EXPIRE_MINUTES * 60,
     )
 
+
 @app.get("/available_timeslots", status_code=status.HTTP_200_OK)
-def get_available_timeslots(token: Annotated[str, Depends(oauth2_scheme)],):
+def get_available_timeslots(
+    token: Annotated[str, Depends(oauth2_scheme)],
+):
     timeslots = get_eligable_times()
     return {"available_timeslots": timeslots}
+
 
 def main() -> None:
     pass
