@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TimepickingService } from '../timepicking.service';
 
 @Component({
   selector: 'app-time-picker',
@@ -15,17 +16,13 @@ export class TimePickerComponent implements OnInit {
 
   ngOnInit(): void {
     this.chosen_time = new FormGroup({
-      day: new FormControl(this.get_suggested_date()),
+      day: new FormControl(this.timepicking_service.get_suggested_date()),
       start_time: new FormControl(this.get_suggested_start_time()),
       end_time: new FormControl(this.get_suggested_end_time()),
     });
   }
 
-  constructor(private http: HttpClient) {}
-
-  get_suggested_date() {
-    return '2024-06-07';
-  }
+  constructor(private http: HttpClient, private timepicking_service: TimepickingService) {}
 
   get_suggested_start_time() {
     return '19:00';
