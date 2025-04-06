@@ -3,7 +3,7 @@ import random
 import re
 import time
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Generator
 
 from playwright.sync_api import Locator, Page, Playwright, expect, sync_playwright
 
@@ -19,10 +19,18 @@ STANDARD_YEAR = 1900
 STANDARD_MONTH = 1
 STANDARD_DAY = 1
 
+def get_page(playwright: Playwright) -> Generator[Page, None]:
+    firefox = playwright.firefox
+    browser = firefox.launch()
+    page = browser.new_page()
+    yield page
+    browser.close()
 
-def get_eligable_timeslots(page: Any):
+def setup_site(page: Page) -> Page:
     anchors = page.locator("a")
-
+    deny_button = anchors.filter(has_text="Accept all")
+    deny_button.click()
+    return page
 
 def run(
     playwright: Playwright,
@@ -30,14 +38,9 @@ def run(
     end_time: datetime = None,
     time_delta: timedelta = None,
 ) -> None:
-    firefox = playwright.firefox
-    browser = firefox.launch()
-    page = browser.new_page()
+    page = next(get_page(playwright))
     page.goto(f"{os.getenv('TT_PAGE')}{start_time.strftime('%d.%m.%Y')}")
-    anchors = page.locator("a")
-    deny_button = anchors.filter(has_text="Accept all")
-    deny_button.click()
-
+    page = setup_site(page)
     desired_timeslots = select_times(
         start_time=start_time, time_delta=time_delta, end_time=end_time
     )
@@ -47,7 +50,7 @@ def run(
             reserve_time(desired_timeslot, page)
         except TimeSlotNotAvailableError as e:
             print(e)
-    browser.close()
+    next(get_page(playwright))
 
 
 def reserve_time(desired_timeslot: datetime, page: Page) -> None:
@@ -162,6 +165,28 @@ def select_times(
         for i in range((end_time - start_time).seconds // (60 * 30))
     ]
 
+def get_timeslots(playwright: Playwright) -> list[datetime]:
+    page = next(get_page(playwright))
+    page.goto(f"{os.getenv('TT_PAGE')}{datetime.now().strftime('%d.%m.%Y')}")
+    page = setup_site(page)
+    start_date_picker = page.locator("input[id='startDatePicker']")
+    start_date_picker.click()
+    ui_date_picker = page.locator("div[id='ui-datepicker-div']")
+    all_dates = ui_date_picker.locator("td[class=' undefined']")
+    result_list = []
+    for date in all_dates.all():
+        data_month = date.get_attribute("data-month")
+        data_year = date.get_attribute("data-year")
+        data_day = date.locator("a").inner_html()
+        if data_month and data_year and data_day:
+            date = datetime(
+                year=int(data_year),
+                month=int(data_month),
+                day=int(data_day),
+            )
+            result_list.append(date)
+    next(get_page(playwright))
+    return result_list
 
 def book_times(
     start_time: datetime, end_time: datetime = None, time_delta: timedelta = None
@@ -169,7 +194,10 @@ def book_times(
     with sync_playwright() as playwright:
         run(playwright, start_time, end_time, time_delta)
 
+def get_eligable_times() -> list[datetime]:
+    with sync_playwright() as playwright:
+        timeslots = get_timeslots(playwright)
+    return timeslots
+
 if __name__ == "__main__":
-    start_time = datetime.strptime("2024-06-07T19:00", "%Y-%m-%dT%H:%M")
-    end_time = datetime.strptime("2024-06-07T20:00", "%Y-%m-%dT%H:%M")
-    book_times(start_time, end_time)
+    get_eligable_times()
