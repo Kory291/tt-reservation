@@ -14,6 +14,7 @@ import { AccessTokenHandlerService } from '../access-token-handler.service';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login-mask.component.html',
+  styleUrl: './login-mask.component.scss',
   providers: [],
 })
 export class LoginMaskComponent implements OnInit {
