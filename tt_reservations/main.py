@@ -16,7 +16,7 @@ from tt_reservations.auth.methods import (
 )
 from tt_reservations.auth.models import Token, User
 from tt_reservations.auth.settings import ACCESS_TOKEN_EXPIRE_MINUTES
-from tt_reservations.book_times import book_times
+from tt_reservations.book_times import book_times, get_eligable_times
 
 DATETIME_PATTERN = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$"
 origins = ["*"]
@@ -102,6 +102,10 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         not_after=time.time() + ACCESS_TOKEN_EXPIRE_MINUTES * 60,
     )
 
+@app.get("/available_timeslots", status_code=status.HTTP_200_OK)
+def get_available_timeslots(token: Annotated[str, Depends(oauth2_scheme)],):
+    timeslots = get_eligable_times()
+    return {"available_timeslots": timeslots}
 
 def main() -> None:
     pass
