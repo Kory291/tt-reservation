@@ -16,13 +16,18 @@ export class AccessTokenHandlerService {
     localStorage.setItem('access_token', token);
   }
   getAccessToken(): string | null {
-    return localStorage.getItem('access_token');
-  }
+    try {
+      return localStorage.getItem('access_token');
+    } catch (error) {
+      console.error('Error retrieving access token:', error);
+      return null;
+    }
+    }
   removeAccessToken() {
     localStorage.removeItem('access_token');
   }
 
-  retrieveAccessToken(username: string, password: string): void {
+retrieveAccessToken(username: string, password: string): void {
     const api_endpoint = 'http://localhost:8000/token';
     // const api_endpoint = 'https://tt-reservation.lukas-schaefer.me/api/token';
     const http_params = new HttpParams()

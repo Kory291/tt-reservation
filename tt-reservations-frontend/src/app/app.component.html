@@ -1,5 +1,7 @@
 <div class="app-container">
-    <app-login-mask class="item" />
-    <app-time-picker class="item" />
-</div>
+    <app-login-mask (login_event)="on_logged_in()" class="item" />
+    @if (logged_in) {
+        <app-time-picker class="item" />
+    }
+    </div>
 <router-outlet />

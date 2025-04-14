@@ -37,15 +37,6 @@ export class TimePickerComponent implements OnInit {
       .set('Access-Control-Allow-Origin', '*')
       .set('Accept', 'application/json')
       .set('Content-Type', 'application/x-www-form-urlencoded');
-    // const api_endpoint =
-    //   'https://tt-reservation.lukas-schaefer.me/api/reserve_time?start_time=' +
-    //   start_day +
-    //   'T' +
-    //   encodeURIComponent(start_time) +
-    //   '&end_time=' +
-    //   start_day +
-    //   'T' +
-    //   encodeURIComponent(end_time);
     const api_endpoint = 'http://localhost:8000/reserve_time?start_time=' + start_day + 'T' + encodeURIComponent(start_time) + '&end_time=' + start_day + 'T' + encodeURIComponent(end_time);
     this.http.post(api_endpoint, { headers: headers }).subscribe({
       next: (response) => {

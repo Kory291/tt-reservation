@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -19,6 +19,8 @@ import { AccessTokenHandlerService } from '../access-token-handler.service';
 })
 export class LoginMaskComponent implements OnInit {
   login_form: FormGroup = new FormGroup({});
+
+  @Output() login_event = new EventEmitter<void>();
 
   ngOnInit(): void {
     this.login_form = new FormGroup({
@@ -42,6 +44,12 @@ export class LoginMaskComponent implements OnInit {
       this.login_form.value.password,
     );
     this.login_form.reset();
-    console.info('Login form submitted:', this.login_form.value);
+    if (this.access_token_handler_service.getAccessToken()) {
+      console.log('User logged in');
+      this.login_event.emit();
+    } else {
+      console.error('User login failed');
+    }
+    
   }
 }
