@@ -22,7 +22,7 @@ STANDARD_MONTH = 1
 STANDARD_DAY = 1
 
 
-def get_page(playwright: Playwright) -> Generator[Page, None]:
+def get_page(playwright: Playwright) -> Generator[Page, None, None]:
     firefox = playwright.firefox
     browser = firefox.launch()
     page = browser.new_page()

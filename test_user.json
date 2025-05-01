@@ -1,8 +1,0 @@
-{
-    "testuser": {
-        "username": "testuser",
-        "full_name": "Test User",
-        "hashed_password": "$2b$12$r0kXsYOfOEQ.K5EbqlkmvO3JBHlfAnWqdY8zXdPhQcl7EmFdo9Orm",
-        "disabled": false
-    }
-}
