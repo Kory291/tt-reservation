@@ -25,7 +25,7 @@ export class TimePickerComponent implements OnInit {
 
   get_suggested_date() {
     let date = new Date();
-    return date.getYear() + "-" + date.getMonth() + "-" + date.getDate();
+    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
   }
 
   get_suggested_start_time() {
