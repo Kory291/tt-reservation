@@ -24,7 +24,7 @@ export class TimePickerComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   get_suggested_date() {
-    date = new Date();
+    let date = new Date();
     return date.getYear() + "-" + date.getMonth() + "-" + date.getDate();
   }
 
