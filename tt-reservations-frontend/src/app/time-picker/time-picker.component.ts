@@ -24,7 +24,8 @@ export class TimePickerComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   get_suggested_date() {
-    return '2024-06-07';
+    date = new Date();
+    return date.getYear() + "-" + date.getMonth() + "-" + date.getDate();
   }
 
   get_suggested_start_time() {
